@@ -45,8 +45,8 @@ class TabIntoAccordion {
       setHash: false, // set hash when opening container
       scrollToContent: false, // when openByHash = true. Value -  boolean or object { scrollShift: Number, scrollTime: Number,}
       pointForTransform: 800, // conversion point to accordion and back
-      openTabTime: 0, // tab operating time
-      openAccordionTime: 400, // slide operating time
+      openTabTime: 0, // tab opening time
+      openAccordionTime: 400, // slide opening time
     };
   }
 
