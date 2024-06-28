@@ -1,0 +1,50 @@
+/* plugin Style */
+.tab-into-accordion {
+  box-sizing: border-box;
+}
+.tab-into-accordion__list {
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tab-into-accordion__content,
+.tab-into-accordion--tab div.tab-into-accordion__item,
+.tab-into-accordion--accordion .tab-into-accordion__list {
+  display: none;
+}
+/* tabIntoAccordion theme */
+.tab-into-accordion--theme .tab-into-accordion__list {
+  position: relative;
+  column-gap: 2px;
+  margin-bottom: -1px;
+  z-index: 2;
+}
+
+.tab-into-accordion--theme .tab-into-accordion__button {
+  display: block;
+  padding: 0.33333em 0.66666em;
+  font-size: 1em;
+  color: #fff;
+  background-color: #b9b8b8;
+  border: none;
+  cursor: pointer;
+}
+.tab-into-accordion--theme .tab-into-accordion__item .tab-into-accordion__button {
+  transition: background-color 0.25s, color 0.25s;
+}
+.tab-into-accordion--theme .tab-into-accordion__item:hover .tab-into-accordion__button,
+.tab-into-accordion--theme .tab-into-accordion__item--active .tab-into-accordion__button {
+  color: initial;
+  background-color: #e5e4e4;
+}
+.tab-into-accordion--theme div.tab-into-accordion__item .tab-into-accordion__button {
+  width: 100%;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+.tab-into-accordion--theme .tab-into-accordion__content {
+  padding: 0.33333em 0.66666em;
+  background-color: #e5e4e4;
+}
