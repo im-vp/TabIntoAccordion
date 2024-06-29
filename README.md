@@ -1,7 +1,7 @@
 TabIntoAccordion
 -------
 Plugin for creating tabs with the ability to turn into an accordion and back.
-With the ability to set settings in the form of date attributes or object.
+With the ability to set settings in the form of data-attributes or object.
 
 __jQuery is required for this to work.__
 
@@ -50,7 +50,7 @@ __jQuery is required for this to work.__
 
 Option | Type | Default | Description
 ------ | ---- | ------- | -----------
-componentType | 'onlyTab', 'onlyAccordion', 'tabIntoAccordion' | 'tabIntoAccordion' | Set the component type: tabs only, accordion only or dynamically changing type.
+componentType | 'onlyTab' \| 'onlyAccordion' \| 'tabIntoAccordion' | 'tabIntoAccordion' | Set the component type: tabs only, accordion only or dynamically changing type.
 componentTheme | string | 'tab-into-accordion--theme' | Css class for component styling.
 isFirstContainerOpen | boolean | true | Whether to open the first container by default.
 openByHash | boolean | true | Open container using hash.
@@ -94,7 +94,7 @@ Method | Argument | Description
 ------ | -------- | -----------
 destroy |  | Destroy component
 refresh |  | Refresh component
-openContainer | string \| number | open container by id
+openContainer | string \| number | Open container by id
 
 Example of setting properties via data-attribute:
 
