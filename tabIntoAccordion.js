@@ -1,6 +1,8 @@
-// Plugin events
-// .on('tabIntoAccordion:afterOpen', (events, openContainer) =>{}); - triggers after opening a tab or accordion
-// .on('tabIntoAccordion:click', () => {}); - triggers when the tab or accordion buttons are pressed
+/*!
+ * TabIntoAccordion - JQuery plugin.
+ * Version: 1.0.0
+ * Docs: https://github.com/im-vp/TabIntoAccordion
+ */
 
 class TabIntoAccordion {
   //Main properties
