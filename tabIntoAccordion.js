@@ -49,6 +49,8 @@ class TabIntoAccordion {
       pointForTransform: 800, // conversion point to accordion and back
       openTabTime: 0, // tab opening time
       openAccordionTime: 400, // slide opening time
+      accordionToggle: true,
+      tabToggle: false,
     };
   }
 
@@ -183,7 +185,7 @@ class TabIntoAccordion {
       itemId = this._getHash();
     }
 
-    if (this._openContainer === itemId) return;
+    if (this._openContainer === itemId && !Boolean(this._options.accordionToggle)) return;
 
     const elemContent = itemId && this._$element.find($(`[data-id-content="${itemId}"]`));
 
@@ -208,20 +210,34 @@ class TabIntoAccordion {
 
   // Tab methods
   _tabWork(elemContent) {
-    this._containers.hide();
+    if (
+      Boolean(this._options.tabToggle) &&
+      elemContent.hasClass('tab-into-accordion__content--active')
+    ) {
+      $(elemContent).fadeOut(this._options.openTabTime);
+    } else {
+      this._containers.hide();
 
-    $(elemContent).fadeIn(this._options.openTabTime, () =>
-      this._$element.trigger('tabIntoAccordion:afterOpen', [elemContent]),
-    );
+      $(elemContent).fadeIn(this._options.openTabTime, () =>
+        this._$element.trigger('tabIntoAccordion:afterOpen', [elemContent]),
+      );
+    }
   }
 
   // Accordion methods
   _accordionWork(elemContent) {
-    this._containers.slideUp(this._options.openAccordionTime);
+    if (
+      Boolean(this._options.accordionToggle) &&
+      elemContent.hasClass('tab-into-accordion__content--active')
+    ) {
+      $(elemContent).slideToggle(this._options.openAccordionTime);
+    } else {
+      this._containers.slideUp(this._options.openAccordionTime);
 
-    $(elemContent).slideDown(this._options.openAccordionTime, () =>
-      this._$element.trigger('tabIntoAccordion:afterOpen', [elemContent]),
-    );
+      $(elemContent).slideDown(this._options.openAccordionTime, () =>
+        this._$element.trigger('tabIntoAccordion:afterOpen', [elemContent]),
+      );
+    }
   }
 
   _addAccordionButton() {
@@ -287,17 +303,36 @@ class TabIntoAccordion {
         ])
       : this._$element.find(`[data-id-title="${itemId}"], [data-id-content="${itemId}"]`);
 
-    this._$element
-      .find('[data-id-title], [data-id-content]')
-      .removeClass('tab-into-accordion__content--active tab-into-accordion__item--active');
+    if (
+      (this._options.tabToggle || this._options.accordionToggle) &&
+      elemWithId.hasClass('tab-into-accordion__item--active')
+    ) {
+      const tabElements =
+        this._options.tabToggle &&
+        this._currentComponentType === this._TAB_TYPE &&
+        elemWithId.filter('li[data-id-title], [data-id-content]');
+      const accordionElements =
+        this._options.accordionToggle &&
+        this._currentComponentType === this._ACCORDION_TYPE &&
+        elemWithId.filter('div[data-id-title], [data-id-content]');
 
-    elemWithId.each((_, el) => {
-      $(el).addClass(
-        $(el).attr('data-id-content')
-          ? 'tab-into-accordion__content--active'
-          : 'tab-into-accordion__item--active',
-      );
-    });
+      $([])
+        .add(tabElements || [])
+        .add(accordionElements || [])
+        .removeClass('tab-into-accordion__content--active tab-into-accordion__item--active');
+    } else {
+      this._$element
+        .find('[data-id-title], [data-id-content]')
+        .removeClass('tab-into-accordion__content--active tab-into-accordion__item--active');
+
+      elemWithId.each((_, el) => {
+        $(el).addClass(
+          $(el).attr('data-id-content')
+            ? 'tab-into-accordion__content--active'
+            : 'tab-into-accordion__item--active',
+        );
+      });
+    }
   }
 
   // ---------------------------------------------
@@ -337,8 +372,7 @@ class TabIntoAccordion {
   // component button click handler
   _tabHandlerClick(e) {
     const tabId = $(e.currentTarget).parent().attr('data-id-title');
-
-    this._$element.trigger('tabIntoAccordion:click');
+    this._$element.trigger('tabIntoAccordion:click', [e.currentTarget, tabId]);
     this._openCloseContainer(tabId);
     this._scrollToContent(this._options.scrollToContent);
   }
