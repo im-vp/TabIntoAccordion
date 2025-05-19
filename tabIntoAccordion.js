@@ -65,14 +65,17 @@ class TabIntoAccordion {
     this._resetState();
     this._$element.removeData(['tabIntoAccordion']);
   }
+
   refresh() {
     this._resetState();
     this._init();
   }
+
   openContainer(itemId) {
     if (!itemId) return;
 
     this._openCloseContainer(itemId);
+    this._scrollToContent(this._options.scrollToContent);
   }
 
   // Collect data attributes set as plugin properties
@@ -108,6 +111,7 @@ class TabIntoAccordion {
     this._transformComponent = this._transformComponent.bind(this);
     this._tabHandlerClick = this._tabHandlerClick.bind(this);
   }
+
   _resetState() {
     this._setComponentTypeClass(null, true);
     this._$element.removeClass('tab-into-accordion--initialized');
@@ -153,8 +157,9 @@ class TabIntoAccordion {
         break;
     }
   }
+
   _transformComponent() {
-    const currentWidth = this._$element.outerWidth();
+    const currentWidth = $(window).outerWidth();
 
     if (
       currentWidth > this._options.pointForTransform &&
@@ -180,7 +185,7 @@ class TabIntoAccordion {
 
     if (this._openContainer === itemId) return;
 
-    const elemContent = itemId && this._$element.find($(`[data-id-content=${itemId}]`));
+    const elemContent = itemId && this._$element.find($(`[data-id-content="${itemId}"]`));
 
     if (elemContent && elemContent.length) {
       this._openContainer = itemId;
@@ -218,6 +223,7 @@ class TabIntoAccordion {
       this._$element.trigger('tabIntoAccordion:afterOpen', [elemContent]),
     );
   }
+
   _addAccordionButton() {
     if (
       this._options.componentType === 'onlyTab' ||
@@ -232,6 +238,7 @@ class TabIntoAccordion {
           const $element = this._createAccordionButton(
             $(title).attr('data-id-title'),
             $(title).children('.tab-into-accordion__button').html(),
+            $(title).hasClass('tab-into-accordion__item--active'),
           );
           $element.children('button').on('click', (e) => this._tabHandlerClick(e));
 
@@ -244,10 +251,12 @@ class TabIntoAccordion {
     this._isAccordionButtonCreate = true;
   }
 
-  _createAccordionButton(id, content) {
+  _createAccordionButton(id, content, isActive = false) {
     const $button = $('<button type="button" class="tab-into-accordion__button"></button>'),
       $accordionButtonItem = $('<div class="tab-into-accordion__item"></div>'),
       result = $accordionButtonItem.attr('data-id-title', id).append($button.html(content));
+
+    isActive && $accordionButtonItem.addClass('tab-into-accordion__item--active');
 
     return result;
   }
@@ -268,14 +277,15 @@ class TabIntoAccordion {
       .addClass(type === this._TAB_TYPE ? tabClass : accordionClass)
       .removeClass(type === this._TAB_TYPE ? accordionClass : tabClass);
   }
+
   _setActiveItemClass(itemId) {
     let elemWithId = !itemId
       ? this._$element.find([
           $('li[data-id-title]')[0],
           $(this._accordionItems)[0],
-          $('[data-id-content')[0],
+          $('[data-id-content]')[0],
         ])
-      : this._$element.find(`[data-id-title=${itemId}], [data-id-content=${itemId}]`);
+      : this._$element.find(`[data-id-title="${itemId}"], [data-id-content="${itemId}"]`);
 
     this._$element
       .find('[data-id-title], [data-id-content]')
@@ -299,12 +309,18 @@ class TabIntoAccordion {
     window.location.hash = hash;
   }
 
-  _scrollToContent(obj) {
+  _scrollToContent(param) {
+    const obj = typeof param === 'object' ? param : Boolean(param);
+
+    if (!obj || !(obj && $(this._$element).find(`[data-id-title="${this._getHash()}"]`).length))
+      return;
+
     const params = {
       scrollShift: 0,
       scrollTime: 500,
       ...obj,
     };
+
     $('body, html').animate(
       {
         scrollTop: $(this._$element).offset().top - params.scrollShift,
@@ -324,6 +340,7 @@ class TabIntoAccordion {
 
     this._$element.trigger('tabIntoAccordion:click');
     this._openCloseContainer(tabId);
+    this._scrollToContent(this._options.scrollToContent);
   }
 
   // component initialization
@@ -333,11 +350,9 @@ class TabIntoAccordion {
     this._openCloseContainer();
     this._handlers();
 
-    if (this._options.scrollToContent) {
-      typeof this._options.scrollToContent === 'object'
-        ? this._scrollToContent(this._options.scrollToContent)
-        : this._scrollToContent();
-    }
+    $(window).on('load', () => {
+      this._scrollToContent(this._options.scrollToContent);
+    });
 
     this._$element.addClass('tab-into-accordion--initialized');
   }
