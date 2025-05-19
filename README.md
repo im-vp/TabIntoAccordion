@@ -36,7 +36,7 @@ With the ability to set settings in the form of data-attributes or object.
 $('.tab-into-accordion').tabIntoAccordion({
   pointForTransform: 1000,
   componentTheme: 'my-class',
-  scrollToConten: {
+  scrollToContent: {
     scrollShift: 100,
     scrollTime: 2000,
   },
@@ -45,17 +45,19 @@ $('.tab-into-accordion').tabIntoAccordion({
 
 ### Settings
 
-| Option               | Type                                               | Default                     | Description                                                                                                                              |
-| -------------------- | -------------------------------------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| componentType        | 'onlyTab' \| 'onlyAccordion' \| 'tabIntoAccordion' | 'tabIntoAccordion'          | Set the component type: tabs only, accordion only or dynamically changing type.                                                          |
-| componentTheme       | string                                             | 'tab-into-accordion--theme' | Css class for component styling.                                                                                                         |
-| isFirstContainerOpen | boolean                                            | true                        | Whether to open the first container by default.                                                                                          |
-| openByHash           | boolean                                            | true                        | Open container using hash.                                                                                                               |
-| setHash              | boolean                                            | false                       | Set hash when opening container.                                                                                                         |
-| scrollToContent      | boolean \| object                                  | false                       | When `openByHash: true`. In the object you can specify the scroll offset and scroll time - `{scrollShift: Number, scrollTime: Number }`. |
-| pointForTransform    | number                                             | 800                         | Conversion point to accordion and back.                                                                                                  |
-| openTabTime          | number                                             | 0                           | Tab opening time.                                                                                                                        |
-| openAccordionTime    | number                                             | 400                         | Slide opening time.                                                                                                                      |
+| Option               | Type                                               | Default                     | Description                                                                                                     |
+| -------------------- | -------------------------------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| componentType        | 'onlyTab' \| 'onlyAccordion' \| 'tabIntoAccordion' | 'tabIntoAccordion'          | Set the component type: tabs only, accordion only or dynamically changing type.                                 |
+| componentTheme       | string                                             | 'tab-into-accordion--theme' | Css class for component styling.                                                                                |
+| isFirstContainerOpen | boolean                                            | true                        | Whether to open the first container by default.                                                                 |
+| openByHash           | boolean                                            | true                        | Open container using hash.                                                                                      |
+| setHash              | boolean                                            | false                       | Set hash when opening container.                                                                                |
+| scrollToContent      | boolean \| object                                  | false                       | In the object you can specify the scroll offset and scroll time - `{scrollShift: Number, scrollTime: Number }`. |
+| pointForTransform    | number                                             | 800                         | Conversion point to accordion and back.                                                                         |
+| openTabTime          | number                                             | 0                           | Tab opening time.                                                                                               |
+| openAccordionTime    | number                                             | 400                         | Slide opening time.                                                                                             |
+| accordionToggle      | boolean                                            | true                        | Ability to close active accordion                                                                               |
+| tabToggle            | boolean                                            | false                       | Ability to close active tab                                                                                     |
 
 ### Events
 
@@ -67,15 +69,17 @@ $('.tab-into-accordion').on('tabIntoAccordion:afterOpen', function (event, openC
 });
 
 // Triggers when the tab or accordion buttons are pressed
-$('.tab-into-accordion').on('tabIntoAccordion:click', function (event) {
-  console.log(event);
+$('.tab-into-accordion').on('tabIntoAccordion:click', function (event, currentTarget, tabId) {
+  console.log('Event object:', event);
+  console.log('Clicked element:', currentTarget);
+  console.log('Tab ID:', tabId);
 });
 ```
 
-| Event                      | Params               | Description                                            |
-| -------------------------- | -------------------- | ------------------------------------------------------ |
-| tabIntoAccordion:afterOpen | event, openContainer | Triggers after opening a tab or accordion              |
-| tabIntoAccordion:click     | event                | Triggers when the tab or accordion buttons are pressed |
+| Event                      | Params                      | Description                                            |
+| -------------------------- | --------------------------- | ------------------------------------------------------ |
+| tabIntoAccordion:afterOpen | event, openContainer        | Triggers after opening a tab or accordion              |
+| tabIntoAccordion:click     | event, currentTarget, tabId | Triggers when the tab or accordion buttons are pressed |
 
 ### Methods
 
@@ -108,9 +112,9 @@ Example of setting properties via data-attribute:
 </div>
 ```
 
-Оust specify property names separated by dashes and in lowercase letters.
+Just specify property names separated by dashes and in lowercase letters.
 
-**Plugin version: 1.0.0**
+**Plugin version: 1.1.0**
 
 #### Dependencies
 
