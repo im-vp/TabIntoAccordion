@@ -114,7 +114,7 @@ Example of setting properties via data-attribute:
 
 Just specify property names separated by dashes and in lowercase letters.
 
-**Plugin version: 1.1.0**
+**Plugin version: 1.1.1**
 
 #### Dependencies
 

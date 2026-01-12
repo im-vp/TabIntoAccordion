@@ -1,6 +1,6 @@
 /*!
  * TabIntoAccordion - JQuery plugin.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Docs: https://github.com/im-vp/TabIntoAccordion
  */
 
@@ -185,7 +185,15 @@ class TabIntoAccordion {
       itemId = this._getHash();
     }
 
-    if (this._openContainer === itemId && !Boolean(this._options.accordionToggle)) return;
+    if (
+      (String(this._openContainer) === itemId &&
+        !Boolean(this._options.accordionToggle) &&
+        this._currentComponentType === 'accordion') ||
+      (String(this._openContainer) === itemId &&
+        !Boolean(this._options.tabToggle) &&
+        this._currentComponentType === 'tab')
+    )
+      return;
 
     const elemContent = itemId && this._$element.find($(`[data-id-content="${itemId}"]`));
 
@@ -215,6 +223,7 @@ class TabIntoAccordion {
       elemContent.hasClass('tab-into-accordion__content--active')
     ) {
       $(elemContent).fadeOut(this._options.openTabTime);
+      this._openContainer = null;
     } else {
       this._containers.hide();
 
@@ -231,6 +240,7 @@ class TabIntoAccordion {
       elemContent.hasClass('tab-into-accordion__content--active')
     ) {
       $(elemContent).slideToggle(this._options.openAccordionTime);
+      this._openContainer = null;
     } else {
       this._containers.slideUp(this._options.openAccordionTime);
 
@@ -303,23 +313,10 @@ class TabIntoAccordion {
         ])
       : this._$element.find(`[data-id-title="${itemId}"], [data-id-content="${itemId}"]`);
 
-    if (
-      (this._options.tabToggle || this._options.accordionToggle) &&
-      elemWithId.hasClass('tab-into-accordion__item--active')
-    ) {
-      const tabElements =
-        this._options.tabToggle &&
-        this._currentComponentType === this._TAB_TYPE &&
-        elemWithId.filter('li[data-id-title], [data-id-content]');
-      const accordionElements =
-        this._options.accordionToggle &&
-        this._currentComponentType === this._ACCORDION_TYPE &&
-        elemWithId.filter('div[data-id-title], [data-id-content]');
-
-      $([])
-        .add(tabElements || [])
-        .add(accordionElements || [])
-        .removeClass('tab-into-accordion__content--active tab-into-accordion__item--active');
+    if (elemWithId.hasClass('tab-into-accordion__item--active')) {
+      $('[data-id-title], [data-id-content]').removeClass(
+        'tab-into-accordion__content--active tab-into-accordion__item--active',
+      );
     } else {
       this._$element
         .find('[data-id-title], [data-id-content]')

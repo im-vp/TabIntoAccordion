@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.1] - 2026-01-12
+
+### Fixed
+
+- Fixed logic issue with closing the active tab/accordion
+
 ## [1.1.0] - 2025-05-19
 
 ### Fixed
